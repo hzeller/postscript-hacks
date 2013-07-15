@@ -1,0 +1,167 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 0 0 400 400
+% (Adapt the bounding box to your needs)
+% (c) H. Zeller <h.zeller@acm.org>; public domain.
+% Little program to create a wheel for reflective optical sensors
+% such as CNY 70
+% .. but mostly its me playing around with PostScript ;-)
+
+/mm { 72 25.4 div mul } bind def
+/inch { 72 mul } bind def
+
+% The parameters for the wheel.
+/steps 12 def             % number of steps for the wheel
+/outer-radius 30 mm def   % outer radius of the wheel
+/inner-radius 20 mm def   % (unprinted) inner radius of the wheel.
+
+/print-mm true def        % print measurements in mm or inch ?
+
+%-- usually, nothing needs to be changed beyond this line ..
+
+/measure-tick 2 mm def   % the length of a tick for measure-lines
+/free-around 3 mm def    % free space around the wheel (measurement free zone)
+/arc-measure-radius outer-radius free-around add measure-tick 2 div add def
+/fontsize 12 def
+/printer-margin 15 mm def
+
+/center {
+    outer-radius free-around add fontsize 2 mul add measure-tick 2.5 mul add
+    printer-margin add
+    dup         % same for x and y
+} def
+
+/PI 3.14159265 def
+
+/Helvetica findfont fontsize scalefont setfont
+0 setlinewidth
+
+% params: x y radius
+% Just creates the path, not stroked.
+/circle {
+    dup 3 index add 2 index moveto
+    0 360 arc
+} bind def
+
+% show n strings on the stack
+% params: string string ... n
+/show-n {
+  -1 1 {
+    -1 roll
+    show
+  } for
+} bind def
+
+% print the n strings on the stack centered around the current x pos
+% params: string string ... n
+/show-n-centered {
+    1 1 2 index {
+	index
+	stringwidth pop 2 div neg 0 rmoveto
+    } for
+    show-n
+} bind def
+
+% returns some strings that format the given value (in point) in mm or inch
+% depending onthe global /print-mm setting.
+% This function returns multiple strings
+% params: number-in-point
+% out: string ... number-of-strings
+/measurement-string {
+    72 div % in inch
+    print-mm {
+        25.4 mul                                  % convert to mm
+	100 mul round 100 div (       ) cvs (mm)  % ... print it with 1/100
+    }
+    {
+      1000 mul round 1000 div (       ) cvs (in)  % print inch with 1/1000
+    } ifelse
+    2
+} bind def
+
+% draw a horizontal measurement line starting from the current position.
+% Print the measurement on it.
+% params: points
+/x-measure-line {
+   0 measure-tick 2 div neg rmoveto
+   0 measure-tick rlineto
+   0 measure-tick 2 div neg rmoveto
+
+   dup 0 rlineto
+   
+   0 measure-tick 2 div neg rmoveto
+   0 measure-tick rlineto
+
+   dup 2 div neg 2 rmoveto
+
+   measurement-string
+   show-n-centered
+   stroke
+} bind def
+
+%outer-radius 0.5 mul dup translate
+
+% Title of this graphics
+center moveto
+0
+% the measure-arc can be below the title. Add some space for it
+arc-measure-radius fontsize add measure-tick 2 div add
+rmoveto
+steps (   ) cvs
+( steps)
+( \( )
+outer-radius 2 PI mul mul steps div measurement-string
+( / segment \))
+2 -1 roll  % get number of measurement-string strings
+4 add      % add our own strings
+show-n-centered
+
+% Center cross
+center moveto
+measure-tick 2 div neg 0 rlineto measure-tick 0 rlineto
+center moveto
+0 measure-tick 2 div neg rlineto 0 measure-tick rlineto
+stroke
+
+% Show the inner and the outer radius measurements
+center moveto
+0 outer-radius neg free-around sub
+   fontsize sub measure-tick sub rmoveto
+inner-radius x-measure-line
+
+center moveto
+0 outer-radius neg free-around sub
+   fontsize 2 mul sub measure-tick 2 mul sub rmoveto
+outer-radius x-measure-line
+
+/piece 360 steps div def
+
+% draw the arc of half a segment together with some nice endmarkers.
+gsave
+clippath center arc-measure-radius measure-tick 2 div sub circle eoclip newpath
+center moveto
+center arc-measure-radius 0 piece 2 div arc closepath stroke
+grestore
+
+% Show the length of the previously drawn arc nicely aligned to the middle.
+% We'r lazy and let the postscript interpreter figure out that point.
+% The text is drawn half a measure tick away from the arc-measure-radius
+center arc-measure-radius measure-tick 2 div add 0 piece 4 div arc currentpoint
+newpath  % forget about the arc. We were only interested in the point.
+moveto   % go to the position the half arc ended up
+2 PI mul inner-radius mul steps div 2 div measurement-string show-n
+( .. ) show
+2 PI mul outer-radius mul steps div 2 div measurement-string show-n
+
+gsave
+% Intersect the current clippath with an inner circle to be empty
+clippath center inner-radius circle eoclip
+newpath  % forget the leftover path
+
+0 piece 360 {
+    center moveto
+    center outer-radius 3 index dup piece 2 div add arc closepath fill
+    pop
+} for
+grestore
+
+showpage

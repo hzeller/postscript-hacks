@@ -1,0 +1,195 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 150 220 500 540
+% (cc-BY-SA) h.zeller@acm.org
+% Quick and dirty hack for a little measuring card. NOT pretty PostScript
+% coding (e.g. all these local assignments to dictionary names).
+%
+/mm { 72 25.4 div mul } def
+/origin-x 80 mm def
+/origin-y 150 mm def
+
+/long-mark-len 4 mm def
+/short-mark-len 2.5 mm def
+
+/label-font-size 3 mm def
+
+% <value1> <value2> min <the-smaller-of-these-values>
+/min { dup 3 -1 roll dup 4 1 roll lt { exch } if pop } def
+
+0.1 setlinewidth
+0 setgray
+
+% <width> <height> rect
+/rect {
+    currentpoint
+    newpath
+    moveto
+    dup
+    0 exch rlineto
+    exch
+    0 rlineto
+    neg 0 exch rlineto
+    closepath
+    stroke
+} def
+
+% <distance> <length> <halfmarks:bool> ruler-x
+% Ruler in x direction.
+/ruler-x {
+   /halfmarks exch def
+   /length exch def
+   /distance exch def
+   gsave
+   0 1 length distance div {
+       pop
+       0 long-mark-len rlineto
+       halfmarks {
+         distance 2 div long-mark-len neg rmoveto
+	 0 short-mark-len rlineto
+	 distance 2 div short-mark-len neg rmoveto
+       } {
+         distance long-mark-len neg rmoveto
+       } ifelse
+   } for
+   stroke
+   grestore
+} def
+
+% <distance> <width> <height> <p-print-halfmarks> square-ruler
+% -
+/square-ruler {
+    gsave
+    /Helvetica findfont label-font-size scalefont setfont
+    0.5 mm label-font-size 0.5 mm add neg rmoveto
+    show
+    grestore
+    
+    4 copy
+    4 copy
+    pop
+    /height exch def
+    /width exch def
+    /distance exch def
+
+    % ruler for x direction. Get rid of 'height' parameter
+    exch pop
+    ruler-x
+    % now the same, just rotated
+    gsave
+    -1 1 scale
+    -90 rotate
+    % Get rid of 'width' parameter
+    3 -1 roll pop
+    ruler-x
+    grestore
+    
+    gsave
+    % We're at the origin. Printing horizontal numbers.
+    /Helvetica findfont distance 1.5 mm min scalefont setfont
+    /is-narrow (99) stringwidth pop distance 0.7 mul lt def
+    0 long-mark-len 0.5 mm add rmoveto
+    0 1 width distance div {
+	/number-to-print exch def
+	% single digits we always print. Larger numbers only if the font
+	% is narrow enough - otherwise only every other number.
+	number-to-print 10 lt number-to-print 2 mod 0 eq is-narrow or or {
+	  number-to-print (   ) cvs
+	  dup
+	  gsave
+	  stringwidth pop 2 div neg 0 rmoveto
+	  show
+	  grestore
+	} if
+	distance 0 rmoveto
+    } for
+    grestore
+    
+    gsave
+    % Back at origin. Vertical numbers.
+    /font-size distance 1.5 mm min def
+    /Helvetica findfont font-size scalefont setfont
+    long-mark-len 0.5 mm add neg 0 rmoveto
+    0 1 height distance div {
+	(   ) cvs
+	dup
+	gsave
+	stringwidth pop neg font-size 3 div neg rmoveto
+	show
+	grestore
+	0 distance neg rmoveto
+    } for
+    grestore
+} def
+
+% width height text1 text2 showbox
+/showbox {
+  gsave
+  exch
+  dup
+  stringwidth pop neg   % text width ..
+  4 index 2 div sub     % half a box width ..
+  0.5 mm sub            % some spacing ..
+  0 rmoveto
+  show
+  2 index               % width of the box ...
+  1 mm add              % 2x the spacing
+  0 rmoveto
+  show
+  grestore
+
+  gsave
+  % placing in the middle of the text-height: move up empirically some
+  % constant to have the origin in the middle of the text and substract half
+  % of the box height (which is on our stack, so we just dup it).
+  dup 2 div neg 0.6 mm add 2 index 2 div neg exch rmoveto
+  rect
+  grestore
+} def
+
+origin-x 17 mm sub origin-y 56 mm sub moveto
+100 mm 70 mm rect
+
+origin-x origin-y moveto
+2.54 mm 70 mm 50 mm true (0.1") square-ruler
+
+10 mm -10 mm rmoveto
+1 mm 60 mm 40 mm true (1 mm) square-ruler
+
+10 mm -10 mm rmoveto
+0.8 mm 50 mm 30 mm true (0.8 mm) square-ruler
+
+10 mm -10 mm rmoveto
+0.65 mm 40 mm 20 mm false (0.65 mm) square-ruler
+
+10 mm -6 mm rmoveto
+/Helvetica findfont 2 mm scalefont setfont
+
+% The SMD two terminal boxes.
+gsave
+1.5 mm 0.1 mm (metric) (imperial) showbox
+0 -2 mm rmoveto
+0.6 mm 0.3 mm (0603) (0201) showbox
+0 -2 mm rmoveto
+1 mm 0.5 mm (1005) (0402) showbox
+0 -2 mm rmoveto
+1.6 mm 0.8 mm (1608) (0603) showbox
+0 -2 mm rmoveto
+2.0 mm 1.25 mm (2012) (0805) showbox
+0 -2.5 mm rmoveto
+2.5 mm 2.0 mm (2520) (1008) showbox
+0 -2.5 mm rmoveto
+3.2 mm 1.6 mm (3216) (1206) showbox
+grestore
+
+22 mm 0.8 mm rmoveto
+3.2 mm 2.5 mm (3225) (1210) showbox
+0 -3 mm rmoveto
+4.5 mm 1.6 mm (4516) (1806) showbox
+0 -3.2 mm rmoveto
+4.5 mm 3.2 mm (4532) (1812) showbox
+0 -3.4 mm rmoveto
+5.0 mm 2.5 mm (5025) (2010) showbox
+0 -3.4 mm rmoveto
+6.4 mm 3.2 mm (6432) (2512) showbox
+
+showpage
