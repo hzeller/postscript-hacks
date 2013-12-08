@@ -1,0 +1,149 @@
+%
+% x-position: diameter * some factor
+% y-position: param
+
+/mm { 25.4 div 72 mul } def
+/inch { 72 mul } def
+
+/x-pos-metric 40 mm def
+/x-pos-ancient 80 mm def
+
+% This fits roughly on a letter page. If you have the
+% luxory of using A4 paper, you can stretch this a bit more.
+/y-factor 27.5 def
+/y-offset 0.7 mm y-factor mul neg  % have first value at bottom
+          10 mm add def            % move up a bit into printable area
+
+/dia-to-y  { y-factor mul y-offset add
+             % .. and we start from the top
+             280 mm exch sub
+} bind def
+
+/width-mark-len 4 mm def
+
+% [dia x]
+/BoreWidthMark {
+    1 index dia-to-y % dia to top. Now: [dia x y]
+    moveto
+    % [dia]
+    dup
+    % left line
+    2 div neg width-mark-len rmoveto
+    0 width-mark-len 2 mul neg rlineto
+
+    % right line
+    0 rmoveto
+    0 width-mark-len 2 mul rlineto
+} bind def
+
+% A little line through the hole to mark on scale.
+% [dia x]
+/BoreMark {
+    1 index dia-to-y % dia to top. Now: [dia x y]
+    moveto
+    % [dia]
+    dup
+    2 div neg 2 mm sub 0 rmoveto
+    4 mm add 0 rlineto
+    stroke
+} bind def
+
+% [dia x]
+/BoreHole {
+    1 index dia-to-y % dia to top. Now: [dia x y]    
+    3 -1 roll 2 div  % radius
+    0 360 arc
+    closepath
+    gsave
+    1 setgray fill
+    grestore
+    stroke
+} bind def
+
+% [label dia x]
+/BoreLabel {
+    1 index dia-to-y % dia to top. Now: [dia x y]        
+    moveto  % center
+    % [label dia]
+    2 div  % only move radius=dia/2 to the right
+    2 mm add 2 rmoveto  % 2 mm to the right, 2 point above (line thick=1)
+    show
+    stroke
+} bind def
+
+% todo: little hook. Vertical thin lines.
+% [label dia x]
+/BoreVis {
+    2 copy BoreMark
+    2 copy BoreHole
+    2 copy BoreWidthMark
+    BoreLabel
+} bind def
+
+/Helvetica findfont 10 scalefont setfont
+
+0 setlinewidth
+
+0 0 1 setrgbcolor
+7 1 102 {
+    dup
+    5 mod 0 eq {
+	1 setlinewidth
+    } {
+	0 setlinewidth
+    } ifelse
+    10 div mm dia-to-y % number interpreted as 0.1 mm
+    x-pos-metric 10 mm sub exch  % x0 y0
+    dup x-pos-ancient 7 mm add exch % x1 y1
+    moveto
+    lineto
+    stroke
+} for
+
+0 0 0 setrgbcolor
+0 setlinewidth
+(0.7 mm) 0.7 mm x-pos-metric BoreVis
+(1 mm) 1 mm x-pos-metric BoreVis
+(1.5 mm) 1.5 mm x-pos-metric BoreVis
+(2 mm) 2 mm x-pos-metric BoreVis
+(2.5 mm) 2.5 mm x-pos-metric BoreVis
+(3 mm) 3 mm x-pos-metric BoreVis
+(3.5 mm) 3.5 mm x-pos-metric BoreVis
+(4 mm) 4 mm x-pos-metric BoreVis
+(4.5 mm) 4.5 mm x-pos-metric BoreVis
+(5 mm) 5 mm x-pos-metric BoreVis
+(5.5 mm) 5.5 mm x-pos-metric BoreVis
+(6 mm) 6 mm x-pos-metric BoreVis
+(6.5 mm) 6.5 mm x-pos-metric BoreVis
+(7 mm) 7 mm x-pos-metric BoreVis
+(7.5 mm) 7.5 mm x-pos-metric BoreVis
+(8 mm) 8 mm x-pos-metric BoreVis
+(8.5 mm) 8.5 mm x-pos-metric BoreVis
+(9 mm) 9 mm x-pos-metric BoreVis
+(9.5 mm) 9.5 mm x-pos-metric BoreVis
+(10 mm) 10 mm x-pos-metric BoreVis
+
+(2/64" \(31.25 thou\)) 2 64 div inch x-pos-ancient BoreVis
+(3/64" \(46.875 thou\)) 3 64 div inch x-pos-ancient BoreVis
+(4/64" \(1/16"\)) 1 16 div inch x-pos-ancient BoreVis
+(5/64") 5 64 div inch x-pos-ancient BoreVis
+(6/64" \(3/32"\)) 3 32 div inch x-pos-ancient BoreVis
+(7/64") 7 64 div inch x-pos-ancient BoreVis
+(8/64" \(1/8"\)) 1 8 div inch x-pos-ancient BoreVis
+(9/64") 9 64 div inch x-pos-ancient BoreVis
+(10/64" \(5/32"\)) 5 32 div inch x-pos-ancient BoreVis
+(11/64") 11 64 div inch x-pos-ancient BoreVis
+(12/64" \(3/16"\)) 3 16 div inch x-pos-ancient BoreVis
+(13/64") 13 64 div inch x-pos-ancient BoreVis
+(14/64" \(7/32"\)) 7 32 div inch x-pos-ancient BoreVis
+(15/64") 15 64 div inch x-pos-ancient BoreVis
+(16/64" \(1/4"\)) 1 4 div inch x-pos-ancient BoreVis
+(17/64") 17 64 div inch x-pos-ancient BoreVis
+(18/64" \(9/32"\)) 9 32 div inch x-pos-ancient BoreVis
+(19/64") 19 64 div inch x-pos-ancient BoreVis
+(20/64" \(5/16"\)) 5 16 div inch x-pos-ancient BoreVis
+(21/64") 21 64 div inch x-pos-ancient BoreVis
+(22/64" \(11/32"\)) 11 32 div inch x-pos-ancient BoreVis
+(23/64") 23 64 div inch x-pos-ancient BoreVis
+(24/64" \(3/8"\)) 3 8 div inch x-pos-ancient BoreVis
+(25/64") 25 64 div inch x-pos-ancient BoreVis

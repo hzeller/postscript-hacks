@@ -28,5 +28,10 @@ count leads, the `smd-ruler.ps` might be useful for you.
 
 ![Image of ruler][ruler-img]
 
+### Metric/Imperial sizes
+Little chart to get a visual understanding about the relationship between metric
+and imperial measurements. Made this in particular to get a visual mapping for
+screws and drills.
+
 [wheel-img]: https://github.com/hzeller/postscript-hacks/raw/master/img/wheel-picture.png
 [ruler-img]: https://github.com/hzeller/postscript-hacks/raw/master/img/smd-ruler.jpg
