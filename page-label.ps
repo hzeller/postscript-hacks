@@ -1,9 +1,19 @@
 %!PS-Adobe-3.0
 %%BoundingBox: 0 0 612 792
 
-/margin 30 def
-/page-width 792 margin 2 mul sub def
-/page-height 612 margin 2 mul sub def
+/mm { 25.4 div 72 mul } def
+/inch { 72 mul } def
+
+% Margin at around the pages (typically to accomodate printer constraints)
+/margin 10 mm def
+
+% Letter size
+/page-width 11.0 inch margin 2 mul sub def
+/page-height 8.5 inch margin 2 mul sub def
+
+% A4 Size
+%/page-width  297 mm margin 2 mul sub def
+%/page-height 210 mm inch margin 2 mul sub def
 
 /default-font /Helvetica findfont def
 

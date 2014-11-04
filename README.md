@@ -33,5 +33,22 @@ Little chart to get a visual understanding about the relationship between metric
 and imperial measurements. Made this in particular to get a visual mapping for
 screws and drills.
 
-[wheel-img]: https://github.com/hzeller/postscript-hacks/raw/master/img/wheel-picture.png
-[ruler-img]: https://github.com/hzeller/postscript-hacks/raw/master/img/smd-ruler.jpg
+### Page Label
+Just given a simple list of labels, create full-page labels that fit into
+a rectangular space best, using the largest font-size possible.
+
+Just append at the end of the PostScript page. For instance
+
+     %%Page:
+     (Goggles\nGloves) show-max
+
+     %%Page:
+     (Drills\nMills) show-max
+
+.. creates these
+
+![Page-labels][page-label]
+
+[wheel-img]: ./img/wheel-picture.png
+[ruler-img]: ./img/smd-ruler.jpg
+[page-label]: ./img/page-label.png
