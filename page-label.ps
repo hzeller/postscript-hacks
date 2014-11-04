@@ -41,21 +41,29 @@
 % <text>
 /show-max {
     gsave
-    612 2 div 0 translate
-    90 rotate    
-    % Test how font would look like with 20 pt.
+
+    % Go to center of page and print landscape
+    page-height 2 div margin add 0 translate
+    90 rotate
+    
+    % Test how font would look like with 50 pt.
     default-font 50.0 scalefont setfont
-    dup
+    dup  % we need the string later
     longest-line  % num size
+    % Now scale the font-size proportionally that it fits in page-width.
     page-width exch div 50.0 mul /sm-font-size exch def
     /sm-line-count exch def
     
-    % Now let's see if it fits onto the page vertically. If not, let's adjust
+    % Now let's see if all lines fit onto the page vertically.
+    % If not, let's adjust
     sm-line-count sm-font-size mul page-height gt {
 	/sm-font-size page-height sm-line-count sm-font-size mul div sm-font-size mul def
     } if
+
+    % Alright, we got our proper font-size, set it.
     default-font sm-font-size scalefont setfont
 
+    % Now just print, newlines separated by \n
     margin sm-font-size sm-line-count mul 2 div sm-font-size 1.2 div sub moveto
     {
        (\n) search
@@ -86,4 +94,3 @@
 
 %%Page:
 (Parenthesis \(example\)) show-max  % Parenthesis need to be escaped
-
