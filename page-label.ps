@@ -1,0 +1,75 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 0 0 612 792
+
+/margin 30 def
+/page-width 792 margin 2 mul sub def
+/page-height 612 margin 2 mul sub def
+
+/default-font /Helvetica findfont def
+
+% Given a \n separated string, determine the longest with the current font
+% (string) -> <#lines> <width-longest>
+/longest-line {
+    /ll-lines 0 def
+    /ll-longest 0 def
+    {
+       (\n) search
+       exch   % want to look at current string first
+       stringwidth pop dup
+       ll-longest gt {
+	   /ll-longest exch def
+       } {
+	   pop
+       } ifelse
+       /ll-lines ll-lines 1 add def
+       not { exit } if   % if this was the last one: exit loop
+       pop   % remove \n
+    } loop
+    ll-lines ll-longest
+} def
+
+% <text>
+/show-max {
+    gsave
+    612 2 div 0 translate
+    90 rotate    
+    % Test how font would look like with 20 pt.
+    default-font 50.0 scalefont setfont
+    dup
+    longest-line  % num size
+    page-width exch div 50.0 mul /sm-font-size exch def
+    /sm-line-count exch def
+    
+    % Now let's see if it fits onto the page vertically. If not, let's adjust
+    sm-line-count sm-font-size mul page-height gt {
+	/sm-font-size page-height sm-line-count sm-font-size mul div sm-font-size mul def
+    } if
+    default-font sm-font-size scalefont setfont
+
+    margin sm-font-size sm-line-count mul 2 div sm-font-size 1.2 div sub moveto
+    {
+       (\n) search
+       exch   % want to look at current string first
+       show
+       not { exit } if   % if this was the last one: exit loop
+       pop   % remove \n
+       currentpoint exch pop sm-font-size sub margin exch moveto
+    } loop
+    showpage
+    grestore
+} def
+
+
+%-- From here, just create new pages ---
+% Simple: create the %%Page: header, then a single line with the string
+% to be printed in parenthesis (with \n for newline), followed by show-max
+% Some samples below.
+
+%%Page:
+(Goggles\nGloves) show-max
+
+%%Page:
+(Drills\nMills) show-max
+
+%%Page:
+(Screwdriver) show-max
