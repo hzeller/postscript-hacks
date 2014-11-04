@@ -5,7 +5,12 @@
 /inch { 72 mul } def
 
 % Margin at around the pages (typically to accomodate printer constraints)
-/margin 10 mm def
+/margin 12 mm def
+
+% Edit here if there should be a footer. It is right aligned at the bottom
+% of the page. Just use () for empty text.
+/footer-text (Noisebridge) def
+/footer-size 6 def
 
 % Letter size
 /page-width 11.0 inch margin 2 mul sub def
@@ -36,6 +41,13 @@
        pop   % remove \n
     } loop
     ll-lines ll-longest
+} def
+
+/footer {
+    default-font footer-size scalefont setfont
+    % Make footer text right-aligned
+    footer-text stringwidth pop page-width exch sub page-height 2 div neg moveto
+    footer-text show
 } def
 
 % <text>
@@ -73,6 +85,7 @@
        pop   % remove \n
        currentpoint exch pop sm-font-size sub margin exch moveto
     } loop
+    footer
     showpage
     grestore
 } def
@@ -91,6 +104,3 @@
 
 %%Page:
 (Screwdriver) show-max
-
-%%Page:
-(Parenthesis \(example\)) show-max  % Parenthesis need to be escaped
