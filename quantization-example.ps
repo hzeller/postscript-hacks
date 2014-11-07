@@ -1,0 +1,57 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 0 0 612 792
+%
+% Shows effects of quantization when rasterizing lines. In the
+% context of 3D printers, thus line-thickness is called exruded-thickness.
+
+/mm { 25.4 div 72 mul } def
+
+% Display everything with this magnification
+/magnification 3.5 def
+
+/extruded-thickness 0.2 mm def
+/line-distance 1.5 def  % extruded thicknesses away. > 1 to see distinct lines
+
+% line-length we want to display (magnification times longer of course)
+/line-len 50 mm def
+
+% 'stepping' resolution in x and y direction.
+/step-resolution 0.2 mm def  % 1/5 mm
+
+% Lines until we reach 45 degrees.
+/lines-45 150 def
+
+% Move <steps-x> steps to the right, increment by fraction of y.
+% <steps-x> <y-increment>
+/show-step-line {
+    /y-increment exch def
+    /steps-x exch def
+    gsave
+    currentpoint translate
+    0 0 moveto
+    /ypos 0 def
+    0 1 steps-x {
+	step-resolution mul magnification mul  % x coordinate
+	/ypos ypos y-increment add def
+	ypos round step-resolution mul magnification mul % y coordinate
+	lineto
+    } for
+    stroke
+    grestore
+} def
+
+extruded-thickness magnification mul setlinewidth
+
+0 1 lines-45 {
+    dup  % remember
+    extruded-thickness magnification mul line-distance mul
+    mul   % distance between lines multiplied by current step
+    20 mm add 20 mm exch moveto
+    45.0 mul lines-45 div dup
+    cos line-len mul step-resolution div  % steps in x direction
+    exch  % angle on top
+    sin   % number of fractional steps to be done for y per x-step
+    show-step-line
+} for
+
+showpage
