@@ -1,0 +1,95 @@
+%!PS-Adobe-3.0
+%
+/mm { 72 25.4 div mul } def
+/origin-x 20 mm def
+/origin-y 20 mm def
+
+/max-len 205 mm def
+/cm-inch-dist -7 mm def
+
+origin-x origin-y translate
+
+0 setlinewidth
+0 cm-inch-dist moveto   max-len cm-inch-dist lineto stroke
+0  0 mm moveto   max-len 0 mm lineto stroke
+0 cm-inch-dist exch moveto   max-len cm-inch-dist exch lineto stroke
+0  0 mm exch moveto   max-len 0 mm exch lineto stroke
+
+
+0.15 mm setlinewidth
+
+0 0 moveto cm-inch-dist 0 lineto stroke
+0 0 moveto 0 cm-inch-dist lineto stroke
+
+0 1 mm max-len {
+    dup
+    0 moveto        0 -2 mm rlineto stroke  % x axis
+    0 exch moveto   -2 mm 0 rlineto stroke  % y axis
+} for
+
+0 5 mm max-len {
+    dup
+    0 moveto 0 -3 mm rlineto stroke         % x axis
+    0 exch moveto   -3 mm 0 rlineto stroke  % y axis
+} for
+
+0 10 mm max-len {
+    dup
+    0 moveto 0 -4 mm rlineto stroke         % x axis
+    0 exch moveto   -4 mm 0 rlineto stroke  % y axis
+} for
+
+0 25.4 mm max-len {
+    dup
+    cm-inch-dist moveto        0 -4 mm rlineto stroke  % x axis
+    cm-inch-dist exch moveto   -4 mm 0 rlineto stroke  % y axis
+} for
+
+0 25.4 mm 2 div max-len {
+    dup
+    cm-inch-dist moveto        0 -3 mm rlineto stroke  % x axis
+    cm-inch-dist exch moveto   -3 mm 0 rlineto stroke  % y axis
+} for
+
+0 25.4 mm 4 div max-len {
+    dup
+    cm-inch-dist moveto        0 -2 mm rlineto stroke  % x axis
+    cm-inch-dist exch moveto   -2 mm 0 rlineto stroke  % y axis
+} for
+
+0 25.4 mm 8 div max-len {
+    dup
+    cm-inch-dist moveto        0 -1 mm rlineto stroke  % x axis
+    cm-inch-dist exch moveto   -1 mm 0 rlineto stroke  % y axis
+} for
+
+
+/Helvetica findfont 7 scalefont setfont
+
+0 1 20 {
+    dup
+    10 mul mm 0.2 mm add -4 mm moveto
+    (   ) cvs show
+} for
+
+0 1 20 {
+    dup
+    10 mul mm 0.4 mm add -5 mm exch moveto
+    (   ) cvs show
+} for
+
+/Helvetica findfont 11 scalefont setfont
+
+0 1 8 {
+    dup
+    25.4 mul mm 0.5 mm add cm-inch-dist 4 mm sub moveto
+    (   ) cvs show
+} for
+
+0 1 8 {
+    dup
+    25.4 mul mm 0.4 mm add cm-inch-dist 4 mm sub exch moveto
+    (   ) cvs show
+} for
+
+showpage
