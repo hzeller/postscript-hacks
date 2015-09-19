@@ -9,6 +9,10 @@
 
 origin-x origin-y translate
 
+180 180.5 div
+200.0 201.0 div
+scale
+
 0 setlinewidth
 0 cm-inch-dist moveto   max-len cm-inch-dist lineto stroke
 0  0 mm moveto   max-len 0 mm lineto stroke
@@ -68,13 +72,13 @@ origin-x origin-y translate
 
 0 1 20 {
     dup
-    10 mul mm 0.2 mm add -4 mm moveto
+    10 mul mm 0.3 mm add -4.7 mm moveto
     (   ) cvs show
 } for
 
 0 1 20 {
     dup
-    10 mul mm 0.4 mm add -5 mm exch moveto
+    10 mul mm 0.7 mm add -5 mm exch moveto
     (   ) cvs show
 } for
 
@@ -88,8 +92,102 @@ origin-x origin-y translate
 
 0 1 8 {
     dup
-    25.4 mul mm 0.4 mm add cm-inch-dist 4 mm sub exch moveto
+    25.4 mul mm 0.6 mm add cm-inch-dist 4 mm sub exch moveto
     (   ) cvs show
 } for
+
+% eps
+save
+-10 mm -8 mm translate
+0.2 0.2 scale
+50 dict begin
+/q { gsave } bind def
+/Q { grestore } bind def
+/cm { 6 array astore concat } bind def
+/w { setlinewidth } bind def
+/J { setlinecap } bind def
+/j { setlinejoin } bind def
+/M { setmiterlimit } bind def
+/d { setdash } bind def
+/m { moveto } bind def
+/l { lineto } bind def
+/c { curveto } bind def
+/h { closepath } bind def
+/re { exch dup neg 3 1 roll 5 3 roll moveto 0 rlineto
+      0 exch rlineto 0 rlineto closepath } bind def
+/S { stroke } bind def
+/f { fill } bind def
+/f* { eofill } bind def
+/n { newpath } bind def
+/W { clip } bind def
+/W* { eoclip } bind def
+/BT { } bind def
+/ET { } bind def
+/pdfmark where { pop globaldict /?pdfmark /exec load put }
+    { globaldict begin /?pdfmark /pop load def /pdfmark
+    /cleartomark load def end } ifelse
+/BDC { mark 3 1 roll /BDC pdfmark } bind def
+/EMC { mark /EMC pdfmark } bind def
+/cairo_store_point { /cairo_point_y exch def /cairo_point_x exch def } def
+/Tj { show currentpoint cairo_store_point } bind def
+/TJ {
+  {
+    dup
+    type /stringtype eq
+    { show } { -0.001 mul 0 cairo_font_matrix dtransform rmoveto } ifelse
+  } forall
+  currentpoint cairo_store_point
+} bind def
+/cairo_selectfont { cairo_font_matrix aload pop pop pop 0 0 6 array astore
+    cairo_font exch selectfont cairo_point_x cairo_point_y moveto } bind def
+/Tf { pop /cairo_font exch def /cairo_font_matrix where
+      { pop cairo_selectfont } if } bind def
+/Td { matrix translate cairo_font_matrix matrix concatmatrix dup
+      /cairo_font_matrix exch def dup 4 get exch 5 get cairo_store_point
+      /cairo_font where { pop cairo_selectfont } if } bind def
+/Tm { 2 copy 8 2 roll 6 array astore /cairo_font_matrix exch def
+      cairo_store_point /cairo_font where { pop cairo_selectfont } if } bind def
+/g { setgray } bind def
+/rg { setrgbcolor } bind def
+/d1 { setcachedevice } bind def
+q 0 -1 117 93 rectclip q
+0 g
+116.094 15.071 m 116.094 63.637 l 111.672 60.501 l 99.621 51.946 l 96.922
+ 51.946 l 96.922 68.485 l 96.922 71.298 95.766 73.868 93.922 75.708 c 92.082
+ 77.551 89.512 78.708 86.699 78.708 c 73.094 78.708 l 72.512 81.942 70.957
+ 84.848 68.73 87.071 c 65.883 89.926 61.918 91.696 57.566 91.696 c 53.219
+ 91.696 49.254 89.926 46.402 87.071 c 44.176 84.848 42.625 81.942 42.043
+ 78.708 c 28.438 78.708 l 25.625 78.708 23.055 77.551 21.215 75.708 c 19.371
+ 73.868 18.215 71.298 18.215 68.485 c 18.215 59.895 l 0 54.954 l 21.23 48.645
+ l 0.41 42.462 l 21.23 36.278 l 0.41 30.091 l 21.266 23.899 l 18.215 22.985
+ l 18.215 10.223 l 18.215 7.407 19.371 4.841 21.215 3.001 c 23.055 1.157
+ 25.625 0.001 28.438 0.001 c 47.379 0.001 l 47.379 2.801 l 47.383 5.622
+48.516 8.153 50.363 10.005 c 52.215 11.852 54.746 12.989 57.566 12.989 c
+ 60.391 12.985 62.918 11.852 64.77 10.005 c 66.621 8.153 67.754 5.622 67.754
+ 2.801 c 67.754 0.001 l 86.699 0.001 l 89.512 0.001 92.082 1.157 93.922
+3.001 c 95.766 4.841 96.922 7.411 96.922 10.223 c 96.922 26.762 l 99.617
+ 26.762 l h
+103.312 31.008 m 103.312 47.7 l 110.492 52.798 l 110.492 25.915 l h
+97.711 32.364 m 86.324 32.364 l 86.324 46.348 l 97.711 46.348 l h
+91.32 10.223 m 91.32 8.954 90.805 7.809 89.961 6.962 c 89.109 6.114 87.969
+ 5.602 86.699 5.598 c 73.094 5.598 l 72.512 8.837 70.957 11.743 68.73 13.966
+ c 65.883 16.817 61.918 18.591 57.566 18.587 c 53.215 18.591 49.25 16.817
+ 46.402 13.966 c 44.176 11.743 42.625 8.837 42.043 5.598 c 28.438 5.598
+l 27.168 5.602 26.023 6.114 25.176 6.962 c 24.328 7.809 23.816 8.954 23.812
+ 10.223 c 23.812 18.817 l 40.867 23.919 l 20.078 30.094 l 40.898 36.278
+l 20.078 42.462 l 40.898 48.645 l 20.488 54.708 l 23.812 55.61 l 23.812
+68.485 l 23.816 69.755 24.328 70.899 25.176 71.747 c 26.023 72.594 27.168
+ 73.106 28.438 73.106 c 47.379 73.106 l 47.379 75.907 l 47.379 78.731 48.516
+ 81.258 50.363 83.11 c 52.215 84.962 54.746 86.094 57.566 86.094 c 60.391
+ 86.094 62.918 84.962 64.77 83.11 c 66.617 81.258 67.754 78.731 67.754 75.907
+ c 67.754 73.106 l 86.699 73.106 l 87.969 73.106 89.109 72.594 89.961 71.747
+ c 90.805 70.899 91.32 69.755 91.32 68.485 c 91.32 51.946 l 80.723 51.946
+ l 80.723 26.762 l 91.32 26.762 l h
+91.32 10.223 m f
+Q Q
+%showpage
+%%Trailer
+end restore
+%%EOF
 
 showpage
