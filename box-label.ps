@@ -1,0 +1,248 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 0 0 612 792
+
+/mm { 25.4 div 72 mul } def
+
+/help-line false def
+
+/columns 12 def
+/rows 12 def
+
+/width 15 mm def
+/height 9 mm def
+
+/start-y 200 mm def
+
+/x-pos 0 def
+/y-pos 0 def
+
+% {box-draw} box
+/box {
+    x-pos width mul start-y y-pos height mul sub moveto
+    exec
+    /x-pos x-pos 1 add def
+    x-pos columns ge {
+	/x-pos 0 def
+	/y-pos y-pos 1 add def
+    } if
+} def
+
+0 setlinewidth
+
+15 mm 0 translate
+0 1 rows {
+    height mul start-y exch sub /y exch def
+    -12 mm y moveto 10 mm 0 rlineto
+    width columns mul 2 mm add y moveto
+    10 mm 0 rlineto
+    help-line {
+	0 y moveto width columns mul y lineto
+    } if
+} for
+0 1 columns {
+    width mul /x exch def
+    x start-y 12 mm add moveto 0 -10 mm rlineto
+    x start-y height rows mul 2 mm add sub moveto
+    0 -10 mm rlineto
+    help-line {
+	x start-y moveto
+	x start-y height rows mul sub lineto
+    } if
+} for
+
+stroke
+
+/font-height 4.8 mm def
+
+/reg-font /Helvetica findfont font-height scalefont def
+/mini-font /Helvetica findfont font-height 2 div scalefont def
+/sym-font /Symbol findfont font-height scalefont def
+/omega-width sym-font setfont (W) stringwidth pop def
+/micro-width sym-font setfont (m) stringwidth pop def
+
+/box-x-offset width 2 div def
+
+/MiniLabel {
+    gsave mini-font setfont width 0.5 mm sub font-height 2 div neg rmoveto
+    dup stringwidth pop neg 0 rmoveto
+    show grestore
+} def
+
+/Label {
+    box-x-offset height 2 div neg font-height 2 div sub rmoveto
+    reg-font setfont
+    dup stringwidth pop 2 div neg 0 rmoveto
+    show
+} def
+
+% string
+/Ohm {
+    (0603) MiniLabel
+    omega-width 2 div neg 0 rmoveto
+    Label
+    sym-font setfont
+    (W) show
+} def
+
+/MicroF {
+    %gsave mini-font setfont width 0.5 mm sub font-height 2 div neg rmoveto
+    %dup stringwidth pop neg 0 rmoveto
+    %show grestore
+    MiniLabel
+    micro-width neg 0 rmoveto  % not div 2, simulating 'F' width.
+    Label
+    sym-font setfont
+    (m) show
+    reg-font setfont (F) show
+} def
+
+{ (1.0) Ohm } box
+{ (1.1) Ohm } box
+{ (1.2) Ohm } box
+{ (1.3) Ohm } box
+{ (1.5) Ohm } box
+{ (1.6) Ohm } box
+{ (1.8) Ohm } box
+{ (2.0) Ohm } box
+{ (2.2) Ohm } box
+{ (2.4) Ohm } box
+{ (2.7) Ohm } box
+{ (3.0) Ohm } box
+{ (3.3) Ohm } box
+{ (3.6) Ohm } box
+{ (3.9) Ohm } box
+{ (4.3) Ohm } box
+{ (4.7) Ohm } box
+{ (5.1) Ohm } box
+{ (5.6) Ohm } box
+{ (6.2) Ohm } box
+{ (6.8) Ohm } box
+{ (7.5) Ohm } box
+{ (8.2) Ohm } box
+{ (9.1) Ohm } box
+
+{ (10) Ohm } box
+{ (11) Ohm } box
+{ (12) Ohm } box
+{ (13) Ohm } box
+{ (15) Ohm } box
+{ (16) Ohm } box
+{ (18) Ohm } box
+{ (20) Ohm } box
+{ (22) Ohm } box
+{ (24) Ohm } box
+{ (27) Ohm } box
+{ (30) Ohm } box
+{ (33) Ohm } box
+{ (36) Ohm } box
+{ (39) Ohm } box
+{ (43) Ohm } box
+{ (47) Ohm } box
+{ (51) Ohm } box
+{ (56) Ohm } box
+{ (62) Ohm } box
+{ (68) Ohm } box
+{ (75) Ohm } box
+{ (82) Ohm } box
+{ (91) Ohm } box
+
+{ (100) Ohm } box
+{ (110) Ohm } box
+{ (120) Ohm } box
+{ (130) Ohm } box
+{ (150) Ohm } box
+{ (160) Ohm } box
+{ (180) Ohm } box
+{ (200) Ohm } box
+{ (220) Ohm } box
+{ (240) Ohm } box
+{ (270) Ohm } box
+{ (300) Ohm } box
+{ (330) Ohm } box
+{ (360) Ohm } box
+{ (390) Ohm } box
+{ (430) Ohm } box
+{ (470) Ohm } box
+{ (510) Ohm } box
+{ (560) Ohm } box
+{ (620) Ohm } box
+{ (680) Ohm } box
+{ (750) Ohm } box
+{ (820) Ohm } box
+{ (910) Ohm } box
+
+{ (1.0k) Ohm } box
+{ (1.1k) Ohm } box
+{ (1.2k) Ohm } box
+{ (1.3k) Ohm } box
+{ (1.5k) Ohm } box
+{ (1.6k) Ohm } box
+{ (1.8k) Ohm } box
+{ (2.0k) Ohm } box
+{ (2.2k) Ohm } box
+{ (2.4k) Ohm } box
+{ (2.7k) Ohm } box
+{ (3.0k) Ohm } box
+{ (3.3k) Ohm } box
+{ (3.6k) Ohm } box
+{ (3.9k) Ohm } box
+{ (4.3k) Ohm } box
+{ (4.7k) Ohm } box
+{ (5.1k) Ohm } box
+{ (5.6k) Ohm } box
+{ (6.2k) Ohm } box
+{ (6.8k) Ohm } box
+{ (7.5k) Ohm } box
+{ (8.2k) Ohm } box
+{ (9.1k) Ohm } box
+
+{ (10k) Ohm } box
+{ (11k) Ohm } box
+{ (12k) Ohm } box
+{ (13k) Ohm } box
+{ (15k) Ohm } box
+{ (16k) Ohm } box
+{ (18k) Ohm } box
+{ (20k) Ohm } box
+{ (22k) Ohm } box
+{ (24k) Ohm } box
+{ (27k) Ohm } box
+{ (30k) Ohm } box
+{ (33k) Ohm } box
+{ (36k) Ohm } box
+{ (39k) Ohm } box
+{ (43k) Ohm } box
+{ (47k) Ohm } box
+{ (51k) Ohm } box
+{ (56k) Ohm } box
+{ (62k) Ohm } box
+{ (68k) Ohm } box
+{ (75k) Ohm } box
+{ (82k) Ohm } box
+{ (91k) Ohm } box
+
+{ (100k) Ohm } box
+{ (120k) Ohm } box
+{ (150k) Ohm } box
+{ (180k) Ohm } box
+{ (220k) Ohm } box
+{ (270k) Ohm } box
+{ (330k) Ohm } box
+{ (390k) Ohm } box
+{ (470k) Ohm } box
+{ (560k) Ohm } box
+{ (680k) Ohm } box
+{ (820k) Ohm } box
+
+{ (1M) Ohm } box
+{ (2.2M) Ohm } box
+{ (4.7M) Ohm } box
+{ (10M) Ohm } box
+
+{ (100nF)(0603) MiniLabel Label } box
+{ (100nF)(0805) MiniLabel Label } box
+{ (10)(1206 | 50V) MicroF } box
+{ (10)(0805 | 10V) MicroF } box
+
+{ (0) Ohm } box
+showpage
