@@ -73,16 +73,19 @@ at the bottom like this:
 
 ![Box Label][box-label-img]
 
-### Ascii Graphics
+### Ascii Graphics from "Bob Neill's Book of Typewriter Art"
 
-Apparently, there were little Ascii graphics in the typewriter times as
-for instance distributed in
+There were little Ascii graphics in the typewriter times. I got interested
+when seeing
 <a href="https://pbs.twimg.com/media/DrgVJYfXQAAgZ2f.jpg">this image
 <img src="https://pbs.twimg.com/media/DrgVJYfXQAAgZ2f.jpg" width="128"></a>
 
-This program parses such instructions and prints them out. Alas, the
-instructions on that image are incomplete, there are probably two more
-pages of it:
+This program parses such instructions and prints them out.
+You've to find the book to fully type all the instructions. I only got to
+page 84-85, while there are pages 86..90 have yet to be typed in, so the
+following image is incomplete.
+(Gladly accepting pull requests... Just edit the PostScript file while
+having it open in okular or similar that reloads whenever you save.)
 
 ![ASCII graphics][ascii-graphics]
 
