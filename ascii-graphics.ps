@@ -1,0 +1,89 @@
+%!PS
+% Attempt to recreate the image of
+% https://pbs.twimg.com/media/DrgVJYfXQAAgZ2f.jpg
+% ... turns out that image does not contain all instructions.
+%%
+
+/start-y 700 def
+/fontsize 12 def
+/linefeed fontsize 0.6 mul def
+
+/Courier-Bold findfont fontsize scalefont setfont
+
+% count character p -
+/p {
+    2 dict begin
+    /ch exch def
+    dup
+    string /str exch def
+    1 sub 0 1 3 -1 roll {
+	str exch ch put
+    } for
+    str show
+    end
+} def
+
+% typewrite the instructions for given line.
+% line (instructions) tw -
+/tw {
+    3 dict begin
+    exch linefeed mul start-y exch sub 10 exch moveto
+    ( )   % search character
+    {
+	search
+	/has-more exch def
+	/instr exch def
+	instr length /len exch def
+	instr len 1 sub get /ch exch def
+	ch 112 eq {   % if last char was 'p'=112 we might have 'sp'
+	    instr len 2 sub get 115 eq {  % second last was 's'=115
+		/ch 32 def
+		instr len 2 sub 32 put
+	    } if
+	} if
+	instr len 1 sub 32 put
+	instr cvi ch p
+	has-more not { exit } if
+    } loop
+    end
+} def
+
+ 1 (29sp 1. 1: 1& 9@ 1& 1: 1.) tw
+ 2 (27sp 1& 17@ 1& 1: 1.) tw
+ 2 (28sp 3S) tw
+ 3 (25sp 1. 1S 21@ 1& 1: 1.) tw
+ 3 (26sp 1& 5S) tw
+ 4 (21sp 2. 1: 1& 8@ 7& 2@ 2& 7@ 1& 1: 1.) tw
+ 4 (25sp 8S) tw
+ 5 (20sp 1. 1& 14@ 13& 5@ 1& 1.) tw
+ 5 (22sp 9S) tw
+ 6 (19sp 1: 13@ 2& 1. 3& 1" 3. 1" 4& 3. 4@ 1& 1.) tw
+ 6 (20sp 11S 8sp 1. 3sp 1.) tw
+ 7 (17sp 1. 1: 10@ 5& 4. 2& 7. 1& 4. 4@ 1& 1.) tw
+ 7 (19sp 10S) tw
+ 8 (16sp 1. 12@ 4& 17. 1& 1. 1& 5@ 1&) tw
+ 8 (17sp 12S) tw
+ 9 (15sp 1. 10@ 5& 1@ 1& 1@ 20. 5@ 1.) tw
+ 9 (16sp 10S) tw
+10 (14sp 1. 11@ 8& 24. 2@ 1.) tw
+10 (15sp 11S) tw
+11 (13sp 1. 14@ 6& 17. 4& 3. 2& 1.) tw
+11 (14sp 10S) tw
+12 (12sp 1. 14@ 6& 19. 8& 2@ 1.) tw
+12 (13sp 8S 1") tw
+13 (12sp 1. 14@ 6& 19. 8& 2@ 1:) tw
+13 (12sp 9S 7&) tw
+14 (11sp 1: 15@ 1& 6: 23. 4& 3@ 1.) tw
+14 (12sp 8S 7&) tw
+15 (10sp 1. 15@ 3& 3: 16. 4sp 5. 3& 1@ 1& 2@) tw
+15 (11sp 9S 5&) tw
+16 (9sp 1. 16@ 4& 9. 3sp 3. 4sp 2. 2sp 3. 4& 2@ 1& 2@ 1:) tw
+16 (10sp 11S 2&) tw
+17 (9sp 18@ 2& 6. 2& 1sp 2. 3sp 2. 1sp 4. 2sp 1. 2sp 2. 4& 5@) tw
+17 (9sp 1: 12S 5&) tw
+18 (8sp 1. 17@ 5& 2. 2& 1. 1sp 2. 4sp 3. 2sp 3. 2sp 6. 3& 2@ 1& 1:) tw
+18 (9sp 16S) tw
+
+% ... well and here we are missing the further instructions.
+
+showpage

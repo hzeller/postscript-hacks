@@ -1,5 +1,5 @@
-Little useful PostScript hacks
-------------------------------
+Little useful and silly PostScript hacks
+----------------------------------------
 
 PostScript is a programming language that allows to define highly precise, real
 coordinate graphics, which I often use to directly print out geometric
@@ -73,7 +73,21 @@ at the bottom like this:
 
 ![Box Label][box-label-img]
 
+### Ascii Graphics
+
+Apparently, there were little Ascii graphics in the typewriter times as
+for instance distributed in
+<a href="https://pbs.twimg.com/media/DrgVJYfXQAAgZ2f.jpg">this image
+<img src="https://pbs.twimg.com/media/DrgVJYfXQAAgZ2f.jpg" width="128"></a>
+
+This program parses such instructions and prints them out. Alas, the
+instructions on that image are incomplete, there are probably two more
+pages of it:
+
+![ASCII graphics][ascii-graphics]
+
 [box-label-img]: ./img/box-label.png
 [wheel-img]: ./img/wheel-picture.png
 [ruler-img]: ./img/smd-ruler.jpg
 [page-label]: ./img/page-label.png
+[ascii-graphics]: ./img/ascii-graphics.png
