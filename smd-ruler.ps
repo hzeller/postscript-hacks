@@ -5,6 +5,7 @@
 % coding (e.g. all these local assignments to dictionary names).
 %
 /mm { 72 25.4 div mul } def
+
 /origin-x 80 mm def
 /origin-y 150 mm def
 
@@ -63,7 +64,7 @@
     0.5 mm label-font-size 0.5 mm add neg rmoveto
     show
     grestore
-    
+
     4 copy
     4 copy
     pop
@@ -82,7 +83,7 @@
     3 -1 roll pop
     ruler-x
     grestore
-    
+
     gsave
     % We're at the origin. Printing horizontal numbers.
     /Helvetica findfont distance 1.5 mm min scalefont setfont
@@ -103,7 +104,7 @@
 	distance 0 rmoveto
     } for
     grestore
-    
+
     gsave
     % Back at origin. Vertical numbers.
     /font-size distance 1.5 mm min def
