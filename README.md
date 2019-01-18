@@ -89,8 +89,16 @@ having it open in okular or similar that reloads whenever you save.)
 
 ![ASCII graphics][ascii-graphics]
 
+### Mirror Reflection
+
+Playing around with mirror reflection on curved surfaces described by a function and
+its derivative.
+
+![Parabolid reflection][mirror-reflection]
+
 [box-label-img]: ./img/box-label.png
 [wheel-img]: ./img/wheel-picture.png
 [ruler-img]: ./img/smd-ruler.jpg
 [page-label]: ./img/page-label.png
 [ascii-graphics]: ./img/ascii-graphics.png
+[mirror-reflection]: ./img/mirror-reflection.png

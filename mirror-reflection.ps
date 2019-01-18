@@ -1,0 +1,104 @@
+%!PS-Adobe
+% Mirror reflection, in particular to play with parabolic vs. spherical mirrors.
+% But any mirror that we can describe with its function and derivative can be
+% simulated.
+
+/max-x 1 def      % x-range for f function. Go from -max-x ... max-x
+/m-thick 0.1 def  % Mirror thickness at the thinnest place.
+
+% Various functions to play with.
+% We always need the function and its derivative to calculate the mirror.
+
+% Parabola
+/f { dup mul 0.2 mul } def
+/f' { 2 mul  0.2 mul } def
+
+% Sphere
+/sphere-radius 10 def  % Must be larger than max-x
+%/f { dup mul sphere-radius dup mul exch sub sqrt     sphere-radius exch sub } def
+%/f' {  1 dict begin /x exch def x sphere-radius x x mul sub sqrt div end } def
+
+% Simple diagonale mirror
+%/f { 0.5 mul } def
+%/f' { pop 0.5 } def
+
+/stretch-x 100 def
+/stretch-y 100 def
+
+stretch-x max-x mul 50 add  % Put X full in frame
+stretch-y 20 add translate  % Make sure negative 1 is full in picture
+
+stretch-x stretch-y scale
+
+% x y len -> x' y' with |x'y'| := len
+/normalize {
+    4 dict begin
+    /target-len exch def
+    /y exch def
+    /x exch def
+    /len x dup mul y dup mul add sqrt target-len div def
+    x len div y len div
+    end
+} def
+
+% Draw mirror and push smallest value seen on the stack draw bottom
+/draw-mirror {
+    2 dict begin
+    /smallest-y 1000 def
+    % Go from negative to positive max-x. Add a little bit of extra at the
+    % end-condition, so that we actually reach it.
+    max-x neg dup dup f moveto
+    max-x neg max-x 40 div max-x dup 100 div add {
+	/x exch def
+	x x f lineto
+	x f smallest-y lt {  /smallest-y x f def } if
+    } for
+    smallest-y   % Our return value
+    end
+} def
+
+% bottom-line-position
+/draw-mirror-bottom {
+    1 dict begin
+    /smallest-value exch def
+    % Draw mirror bottom m-thick below lowest value.
+    max-x max-x f moveto
+    max-x smallest-value lineto
+    max-x 2 mul neg 0 rlineto
+    max-x neg dup f lineto
+    stroke
+} def
+
+% TODO: right now we only assume rays coming from 90 degrees. Allow arbitrary.
+/draw-reflection {
+    max-x neg max-x 5 div max-x max-x 100 div add {
+	/x exch def
+	x 4 moveto    x x f lineto stroke   % Beam hitting the mirror
+
+	gsave
+	% Show normal vector on vector. multiply gradient f' by incoming angle
+	% i * (1 + f'i) = -f' + i  % incoming angle 90 degrees; i
+	0.4 setgray
+	[2 stretch-x div 2 stretch-x div] 0 setdash
+	x x f moveto   x f' neg 1 0.2 normalize rlineto stroke
+	grestore
+
+	% Reflection is two angle turns of the gradient. Let's just do this
+	% in the complex plane for simplicity
+	% (1 + f'i) (1 + f'i) = 1 - f'^2 + 2*f'i
+	% Then again multiply with the incoming beam
+	% i*(1-f'^2 + 2*f'i) = -2*f + 1-f'^2i
+	x x f moveto   x f' 2 mul neg 1 x f' dup mul sub 2 normalize rlineto stroke
+    } for
+} def
+
+1.5 stretch-x div setlinewidth
+
+draw-mirror  % Returns lowest point
+m-thick sub draw-mirror-bottom
+
+0.2 stretch-x div setlinewidth
+0 0 1 setrgbcolor
+draw-reflection
+
+showpage
