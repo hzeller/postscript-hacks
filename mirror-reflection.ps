@@ -1,37 +1,83 @@
-%!PS-Adobe
+%!PS-Adobe-3.0 EPSF-3.0
+%%BoundingBox: 0 0 500 400
+
 % Mirror reflection, in particular to play with parabolic vs. spherical mirrors.
 % But any mirror that we can describe with its function and derivative can be
 % simulated.
 
 /max-x 1 def      % x-range for f function. Go from -max-x ... max-x
 /m-thick 0.1 def  % Mirror thickness at the thinnest place.
+/show-normal true def
+/rays 10 def      % Rays on each side of the mirror
 
 % Various functions to play with.
 % We always need the function and its derivative to calculate the mirror.
 
 % Parabola
-/f { dup mul 0.2 mul } def
-/f' { 2 mul  0.2 mul } def
+/f { dup mul 0.16 mul } def
+/f' { 2 mul  0.16 mul } def
+/description (Parabolic Mirror) def
 
 % Sphere
 /sphere-radius 10 def  % Must be larger than max-x
 %/f { dup mul sphere-radius dup mul exch sub sqrt     sphere-radius exch sub } def
 %/f' {  1 dict begin /x exch def x sphere-radius x x mul sub sqrt div end } def
+%/description (Spherical Mirror) def
 
 % Simple diagonale mirror
-%/f { 0.5 mul } def
+%/f { 0.5 mul 0.5 add } def
 %/f' { pop 0.5 } def
+%/description (Straight Mirror) def
 
-/stretch-x 100 def
-/stretch-y 100 def
+/stretch-x 200 def
+/stretch-y 200 def
 
-stretch-x max-x mul 50 add  % Put X full in frame
-stretch-y 20 add translate  % Make sure negative 1 is full in picture
+/Helvetica findfont 16 stretch-x div scalefont setfont
 
-stretch-x stretch-y scale
+%-- some vector helper functions
+
+% ax ay bx by
+/dot {
+    4 dict begin
+    /by exch def  /bx exch def  /ay exch def  /ax exch def
+    ax bx mul ay by mul add
+    end
+} def
+
+% ax ay bx by
+/vsub {
+    4 dict begin
+    /by exch def  /bx exch def  /ay exch def  /ax exch def
+    ax bx sub
+    ay by sub
+    end
+} def
+
+% ax ay scalar
+/vmul {
+    3 dict begin
+    /scalar exch def  /ay exch def  /ax exch def
+    ax scalar mul
+    ay scalar mul
+    end
+} def
+
+% Reflect vector at normal vector
+% vx vy nx ny
+/reflect {
+    4 dict begin
+    /ny exch def  /nx exch def  /vy exch def  /vx exch def
+    vx vy
+    nx ny
+    vx vy nx ny dot
+    nx ny nx ny dot div 2 mul
+    vmul
+    vsub
+    end
+} def
 
 % x y len -> x' y' with |x'y'| := len
-/normalize {
+/vector-scale {
     4 dict begin
     /target-len exch def
     /y exch def
@@ -67,32 +113,45 @@ stretch-x stretch-y scale
     max-x 2 mul neg 0 rlineto
     max-x neg dup f lineto
     stroke
+    max-x neg 0.2 add smallest-value 0.025 add moveto description show
+    %gsave max-x 0.1 add -0.1 moveto 90 rotate (HZ 2019) show grestore
 } def
+
+/incoming-rays { 0.2 1 } def
 
 % TODO: right now we only assume rays coming from 90 degrees. Allow arbitrary.
 /draw-reflection {
-    max-x neg max-x 5 div max-x max-x 100 div add {
+    max-x neg max-x rays div max-x max-x 100 div add {
 	/x exch def
-	x 4 moveto    x x f lineto stroke   % Beam hitting the mirror
+	%x 4 moveto    x x f lineto stroke   % Beam hitting the mirror
+	x x f moveto incoming-rays 4 vector-scale rlineto stroke
 
-	gsave
-	% Show normal vector on vector. multiply gradient f' by incoming angle
-	% i * (1 + f'i) = -f' + i  % incoming angle 90 degrees; i
-	0.4 setgray
-	[2 stretch-x div 2 stretch-x div] 0 setdash
-	x x f moveto   x f' neg 1 0.2 normalize rlineto stroke
-	grestore
+	show-normal {
+	    gsave
+	    % Show normal vector on mirror. Turn gradient f' by 90 degrees.
+	    0.4 setgray
+	    [2 stretch-x div 2 stretch-x div] 0 setdash
+	    x x f moveto   x f' neg 1 0.2 vector-scale rlineto stroke
+	    grestore
+	} if
 
-	% Reflection is two angle turns of the gradient. Let's just do this
-	% in the complex plane for simplicity
-	% (1 + f'i) (1 + f'i) = 1 - f'^2 + 2*f'i
-	% Then again multiply with the incoming beam
-	% i*(1-f'^2 + 2*f'i) = -2*f + 1-f'^2i
-	x x f moveto   x f' 2 mul neg 1 x f' dup mul sub 2 normalize rlineto stroke
+	x x f moveto
+	incoming-rays
+	1 x f'     % normal vector
+	reflect
+	2 vector-scale rlineto stroke
     } for
 } def
 
+
+%-- scale and move the scene
+stretch-x max-x mul 50 add  % Put X full in frame
+30 translate  % Make sure negative 1 is full in picture
+stretch-x stretch-y scale
 1.5 stretch-x div setlinewidth
+
+
+/incoming-rays { 0 1 } def   % Direction of incoming rays dx dy
 
 draw-mirror  % Returns lowest point
 m-thick sub draw-mirror-bottom
