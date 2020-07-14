@@ -32,7 +32,8 @@ of 30mm. The output also includes some helpful measurements:
 #### Gray encoder
 
 To measure absolute positions, you need a gray encoder wheel. The PostScript
-file allows to choose the number of bits, inner and outer diameter.
+file [`gray-wheel.ps`](./gray-wheel.ps) allows to choose the number of bits,
+inner and outer diameter.
 
 ![Gray encoder](./img/gray-wheel.png)
 
