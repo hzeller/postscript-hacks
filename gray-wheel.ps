@@ -8,25 +8,38 @@
 /mm { 72 25.4 div mul } bind def
 /inch { 72 mul } bind def
 
-% The parameters for the wheel.
-/bits 6 def               % to encode 2^n values
-/outer-radius 22 mm def   % outer radius of the wheel
-/inner-radius 10 mm def   % Where the inner segment starts.
-/strip-gap 0.2 mm def     % gap between bars
-
-/print-title true def
+/print-title true def     % Should we print a title on the page
 /print-mm true def        % print measurements in mm or inch ?
+
+% By default, we're making a gray encoded wheel, but with make-gray-band
+% set to true, this makes a gray encoded band
+/make-gray-band false def
+
+% The parameters for the gray code and output wheel or band.
+/bits 6 def               % to encode 2^n values
+
+% in case make-gray-band false
+/outer-radius 30 mm def   % Where the inner segment starts.
+
+% in case make-gray-band true, this is the length of the band
+/band-length 130 mm def
+
+% The width and gap of the encoder bars
+/strip-width 1.8 mm def
+/strip-gap 0.2 mm def     % gap between bars
 
 %-- usually, nothing needs to be changed beyond this line ..
 
 /steps 1 bits bitshift def
-/strip-step outer-radius inner-radius sub bits 1 sub div def
-/strip-width strip-step strip-gap sub def
-
-/cross-tick 2 mm def   % the length of a tick for measure-lines
-/free-around 10 mm def    % free space around the wheel (measurement free zone)
+/strip-step strip-width strip-gap add def
+/inner-radius outer-radius strip-step bits mul sub def
 
 /fontsize 10 def
+/free-around 5 mm def    % free space around the wheel (measurement free zone)
+/title-offset inner-radius strip-step bits mul add fontsize 2 mul add free-around add def
+
+/cross-tick 2 mm def   % the length of a tick for measure-lines
+
 /TAU 3.14159265897 2 mul def
 
 /Helvetica findfont fontsize scalefont setfont
@@ -71,23 +84,37 @@
 
 
 % Title of this graphics
-0 outer-radius fontsize 2 mul add free-around add moveto
+0 title-offset moveto
 steps (     ) cvs
 ( steps)
 ( \(better than )
-inner-radius TAU mul steps div measurement-string
-( pick-up accuracy on inner segment needed\))
+make-gray-band {
+    band-length steps div
+    2 div   % Sampling accuracy 1/2 LSB
+    measurement-string
+    ( pick-up accuracy needed\))
+} {
+    inner-radius TAU mul steps div
+    2 div   % Sampling accuracy 1/2 LSB
+    measurement-string
+    ( pick-up accuracy on inner segment needed\))
+} ifelse
+
 2 -1 roll  % get number of measurement-string strings
 4 add      % add our own strings
 show-n-centered
 
-0 outer-radius fontsize add free-around add moveto
-strip-width measurement-string ( strip width) 2 -1 roll 1 add show-n-centered
+0 title-offset fontsize sub moveto
+strip-step measurement-string ( strip step) 2 -1 roll 1 add show-n-centered
 
-% Center cross
-0 0 moveto cross-tick 2 div neg 0 rlineto cross-tick 0 rlineto
-0 0 moveto 0 cross-tick 2 div neg rlineto 0 cross-tick rlineto
-stroke
+make-gray-band {
+    -200 0 translate
+} {
+    % Center cross
+    0 0 moveto cross-tick 2 div neg 0 rlineto cross-tick 0 rlineto
+    0 0 moveto 0 cross-tick 2 div neg rlineto 0 cross-tick rlineto
+    stroke
+} ifelse
 
 % Show a strip of an arc
 % start-fraction arc-fraction inner-radius width
@@ -102,6 +129,24 @@ stroke
     inner-radius 0 moveto inner-radius width add 0 lineto
     0 0 inner-radius width add 0 angle arc
     0 0 inner-radius  angle 0 arcn
+    fill
+    grestore
+    end
+} def
+
+% start-fraction len-fraction offset width
+/band-strip {
+    4 dict begin
+    /width exch def
+    /offset exch def
+    /len-fraction exch band-length mul def
+    /start-fraction exch band-length mul def
+    gsave
+    start-fraction offset moveto
+    start-fraction len-fraction add offset lineto
+    0 width rlineto
+    start-fraction offset width add lineto
+    closepath
     fill
     grestore
     end
@@ -122,14 +167,19 @@ stroke
 
     /g number to-gray def
     /current-mask 1 bits 1 sub bitshift def
-    /radius inner-radius def
+    /offset 0 def
     0 1 bits {
 	pop
 	g current-mask and 0 eq not {
-	    start-arc segment-width radius strip-width arc-strip
+	    make-gray-band {
+		start-arc segment-width offset strip-width band-strip
+	    } {
+		start-arc segment-width offset inner-radius add strip-width arc-strip
+	    } ifelse
+
 	} if
 	/current-mask current-mask -1 bitshift def
-	/radius radius strip-step add def
+	/offset offset strip-step add def
     } for
 } for
 

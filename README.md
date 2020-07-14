@@ -33,9 +33,14 @@ of 30mm. The output also includes some helpful measurements:
 
 To measure absolute positions, you need a gray encoder wheel. The PostScript
 file [`gray-wheel.ps`](./gray-wheel.ps) allows to choose the number of bits,
-inner and outer diameter.
+outer diameter and encoder bar width.
 
 ![Gray encoder](./img/gray-wheel.png)
+
+.. alternatively, this can be a band with gray values, if you need to absolutely
+encode linear positions by setting `/make-gray-band` to true
+
+![Gray encoder band](./img/gray-band.png)
 
 ### SMD ruler
 If you're soldering a lot of SMD parts and need to check measurements or
