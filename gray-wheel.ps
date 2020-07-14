@@ -61,7 +61,7 @@
     72 div % in inch
     print-mm {
         25.4 mul                                  % convert to mm
-	100 mul round 100 div (       ) cvs (mm)  % ... print it with 1/100
+	1000 mul round 1000 div (       ) cvs (mm)  % ... print it with 1/100
     }
     {
       1000 mul round 1000 div (       ) cvs (in)  % print inch with 1/1000
@@ -72,9 +72,9 @@
 
 % Title of this graphics
 0 outer-radius fontsize 2 mul add free-around add moveto
-steps (   ) cvs
+steps (     ) cvs
 ( steps)
-( \( )
+( \(better than )
 inner-radius TAU mul steps div measurement-string
 ( pick-up accuracy on inner segment needed\))
 2 -1 roll  % get number of measurement-string strings
@@ -113,7 +113,7 @@ stroke
     -1 bitshift xor
 } def
 
-/segment-width 1 steps div 1.00001 mul def % slightly oversize to solidly join
+/segment-width 1 steps 0.25 sub div def % slightly oversize to solidly join
 
 %-- now, the actual meat
 0 1 steps 1 sub {
