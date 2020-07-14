@@ -18,6 +18,8 @@ and scale the image to what they think the margins of the paper is. So make sure
 to always set the margins to zero).
 
 ### Encoder wheel
+
+#### Simple segmented
 For rotational applications, it is often needed to keep track of the
 turns. The [`encoder-wheel.ps`](./encoder-wheel.ps) is freely configurable in
 radius and number of segments displayed.
@@ -26,6 +28,13 @@ Here configured for 12 steps with an inner radius of 20mm and an outer radius
 of 30mm. The output also includes some helpful measurements:
 
 ![Image or encoder wheel][wheel-img]
+
+#### Gray encoder
+
+To measure absolute positions, you need a gray encoder wheel. The PostScript
+file allows to choose the number of bits, inner and outer diameter.
+
+![Gray encoder](./img/gray-wheel.png)
 
 ### SMD ruler
 If you're soldering a lot of SMD parts and need to check measurements or

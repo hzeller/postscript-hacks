@@ -1,0 +1,136 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 0 0 400 400
+% (Adapt the bounding box to your needs)
+% (cc-BY-SA) H.Zeller <h.zeller@acm.org>
+% Little program to create a gray encoder wheel.
+
+% Allow to use various measrurement formats.
+/mm { 72 25.4 div mul } bind def
+/inch { 72 mul } bind def
+
+% The parameters for the wheel.
+/bits 6 def               % to encode 2^n values
+/outer-radius 22 mm def   % outer radius of the wheel
+/inner-radius 10 mm def   % Where the inner segment starts.
+/strip-gap 0.2 mm def     % gap between bars
+
+/print-title true def
+/print-mm true def        % print measurements in mm or inch ?
+
+%-- usually, nothing needs to be changed beyond this line ..
+
+/steps 1 bits bitshift def
+/strip-step outer-radius inner-radius sub bits 1 sub div def
+/strip-width strip-step strip-gap sub def
+
+/cross-tick 2 mm def   % the length of a tick for measure-lines
+/free-around 10 mm def    % free space around the wheel (measurement free zone)
+
+/fontsize 10 def
+/TAU 3.14159265897 2 mul def
+
+/Helvetica findfont fontsize scalefont setfont
+0 setlinewidth
+200 200 translate   % centered on our page
+
+% Print the n strings on the stack
+% params: string string ... n
+/show-n {
+  -1 1 {
+    -1 roll
+    print-title { show } { pop } ifelse
+  } for
+} bind def
+
+% print the n strings on the stack centered around the current x pos
+% params: string string ... n
+/show-n-centered {
+    1 1 2 index {
+	index
+	stringwidth pop 2 div neg 0 rmoveto
+    } for
+    show-n
+} bind def
+
+% returns some strings that format the given value (in point) in mm or inch
+% depending onthe global /print-mm setting.
+% This function returns multiple strings
+% params: number-in-point
+% out: string ... number-of-strings
+/measurement-string {
+    72 div % in inch
+    print-mm {
+        25.4 mul                                  % convert to mm
+	100 mul round 100 div (       ) cvs (mm)  % ... print it with 1/100
+    }
+    {
+      1000 mul round 1000 div (       ) cvs (in)  % print inch with 1/1000
+    } ifelse
+    2
+} bind def
+
+
+% Title of this graphics
+0 outer-radius fontsize 2 mul add free-around add moveto
+steps (   ) cvs
+( steps)
+( \( )
+inner-radius TAU mul steps div measurement-string
+( pick-up accuracy on inner segment needed\))
+2 -1 roll  % get number of measurement-string strings
+4 add      % add our own strings
+show-n-centered
+
+0 outer-radius fontsize add free-around add moveto
+strip-width measurement-string ( strip width) 2 -1 roll 1 add show-n-centered
+
+% Center cross
+0 0 moveto cross-tick 2 div neg 0 rlineto cross-tick 0 rlineto
+0 0 moveto 0 cross-tick 2 div neg rlineto 0 cross-tick rlineto
+stroke
+
+% Show a strip of an arc
+% start-fraction arc-fraction inner-radius width
+/arc-strip {
+    4 dict begin
+    /width exch def
+    /inner-radius exch def
+    /angle exch 360 mul def
+    /start-angle exch 360 mul def
+    gsave
+    start-angle rotate
+    inner-radius 0 moveto inner-radius width add 0 lineto
+    0 0 inner-radius width add 0 angle arc
+    0 0 inner-radius  angle 0 arcn
+    fill
+    grestore
+    end
+} def
+
+% convert value on stack to gray-code n ^ (n >> 1)
+/to-gray {
+    dup
+    -1 bitshift xor
+} def
+
+/segment-width 1 steps div 1.00001 mul def % slightly oversize to solidly join
+
+%-- now, the actual meat
+0 1 steps 1 sub {
+    /number exch def
+    /start-arc number steps div def  % in this step we start arc here
+
+    /g number to-gray def
+    /current-mask 1 bits 1 sub bitshift def
+    /radius inner-radius def
+    0 1 bits {
+	pop
+	g current-mask and 0 eq not {
+	    start-arc segment-width radius strip-width arc-strip
+	} if
+	/current-mask current-mask -1 bitshift def
+	/radius radius strip-step add def
+    } for
+} for
+
+showpage
