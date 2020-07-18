@@ -1,0 +1,116 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 0 0 1000 500
+
+% We choose a bounding box so that it is less high than a typical 16:9 monitor,
+% so that monitors with a more wider aspect ratio on full screen still are
+% accurate.
+% We're relying on the width of the chart being fully scaled to the
+% chosen screen-width for accurate scaling of the Landolt rings.
+
+%--------------------------------------------------------------
+% All you need to give is the width of the screen and viewing distance
+% for accurate Landolt rings.
+% View on full-screen.
+%--------------------------------------------------------------
+
+% The size is calculated from the view distance vs the width of
+% the screen. This can be in any units, so use cm or inches as long
+% as it is the same units.
+/view-distance 200 def
+/screen-width 70 def
+
+% Visus ranges we're interested in.
+/test-range [0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1] def
+
+%---------------------------------
+/bounding-box-width 1000 def
+/bounding-box-height 500 def
+
+% A visus of 1.0 (6/6; 20/20) requires to resolve one arcminute
+/arcminute-angle 1 60 div def
+
+/tan { dup sin exch cos div } def
+
+% size of a arcminute feature per distance units.
+/distance-fraction arcminute-angle 2 div tan 2 mul def
+
+% Feature size given the above screen and distance parameters
+% Get the feature size in distance units, divide by screen widht in the same
+% distance units, which results in screen units. Multiply by display units
+% we have per screen.
+/feature-size view-distance distance-fraction mul
+              screen-width div
+              bounding-box-width mul
+	      def
+
+/Helvetica findfont bounding-box-width 100 div scalefont setfont
+
+% Landolt ring according to DIN 58220 / ISO 8596
+% <unit> <angle> landolt
+/landolt {
+    1 dict begin
+    /angle exch def
+    /unit exch def
+    /inner-radius unit 1.5 mul def
+    /outer-radius unit 2.5 mul def
+    /inner-opening-angle 0.5 1.5 atan def
+    /outer-opening-angle 0.5 2.5 atan def
+    /inner-angle 360 inner-opening-angle sub def
+    /outer-angle 360 outer-opening-angle sub def
+    gsave
+    currentpoint translate
+    angle rotate
+    inner-opening-angle cos inner-radius mul
+    inner-opening-angle sin inner-radius mul moveto
+    0 0 inner-radius inner-opening-angle inner-angle arc
+
+    outer-opening-angle neg cos outer-radius mul
+    outer-opening-angle neg sin outer-radius mul lineto
+    0 0 outer-radius outer-angle outer-opening-angle arcn
+
+    closepath
+    fill
+    grestore
+    end
+} def
+
+% Grid distance is determined by lowest visus we test
+/grid-distance feature-size test-range 0 get div 10 mul def
+
+bounding-box-width 2 div
+grid-distance 4 mul sub
+bounding-box-width bounding-box-width div bounding-box-height mul 2 div
+grid-distance test-range length 1 sub mul 2 div add
+moveto
+
+
+% <visus> <grid-distance> ring-series
+/ring-series {
+    2 dict begin
+    /d exch def
+    /visus exch def
+    gsave
+    feature-size visus div 0 landolt d 0 rmoveto
+    feature-size visus div 45 landolt d 0 rmoveto
+    feature-size visus div 90 landolt d 0 rmoveto
+    feature-size visus div 135 landolt d 0 rmoveto
+    feature-size visus div 180 landolt d 0 rmoveto
+    feature-size visus div 225 landolt d 0 rmoveto
+    feature-size visus div 270 landolt d 0 rmoveto
+    feature-size visus div 315 landolt d 0 rmoveto
+    visus (     ) cvs show
+    (  [ 20/) show 20 visus div cvi (     ) cvs show ( ]) show
+    grestore
+    end
+} def
+
+
+test-range {
+    grid-distance ring-series
+    0 grid-distance neg rmoveto
+} forall
+
+% make sure all of the chart is displayed by showing something in the corners
+0 0 moveto 10 10 rlineto stroke
+bounding-box-width bounding-box-height moveto -10 -10 rlineto stroke
+showpage

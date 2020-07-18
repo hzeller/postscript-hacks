@@ -53,6 +53,14 @@ The [`metric-imperial-diameter.ps`](./metric-imperial-diameter.ps) creates
 a chart to get a visual understanding about the relationship between metric
 and imperial measurements and hole-sizes. Typically good to gauge drill sizes.
 
+### Landolt eye chart
+
+To eye test with Landolt rings (DIN 58220) directly on a monitor.
+Modify the `/view-distance` and `/screen-width` which automatically
+caluculates the right scaling, and view in full-screen on monitor.
+
+![Landolt chart](./img/landolt.png)
+
 ### Page Label
 Just given a simple list of labels, create full-page labels that fit into
 a rectangular space best, using the largest font-size possible. This is the
