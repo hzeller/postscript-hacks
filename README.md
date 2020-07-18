@@ -58,6 +58,7 @@ and imperial measurements and hole-sizes. Typically good to gauge drill sizes.
 To eye test with Landolt rings (DIN 58220) directly on a monitor.
 Modify the `/view-distance` and `/screen-width` which automatically
 caluculates the right scaling, and view in full-screen on monitor.
+If `/do-random` is set to true, the rings turn randomly with each reload.
 
 ![Landolt chart](./img/landolt.png)
 

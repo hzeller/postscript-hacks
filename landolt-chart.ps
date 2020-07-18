@@ -21,16 +21,23 @@
 /view-distance 200 def
 /screen-width 70 def
 
+% Show random arrangement in each reload. If fales, just show in sequence.
+/do-random true def
+
 % Visus range to display
 /test-range [0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0] def
 
 % Distance of rings as multiplier of the diameter of
 % the largest ring (lowest visus).
-/grid-multiplier 1.8 def
+/grid-multiplier 1.6 def
 
 %---------------------------------
 /bounding-box-width 1000 def
 /bounding-box-height 500 def
+
+/ring-angles [0 45 90 135 180 225 270 315 ] def
+
+realtime srand
 
 % A visus of 1.0 (6/6; 20/20) requires to resolve one arcminute
 /arcminute-angle 1 60 div def
@@ -44,12 +51,10 @@
 % Get the feature size in distance units, divide by screen widht in the same
 % distance units, which results in screen units. Multiply by display units
 % we have per screen.
-/feature-size view-distance distance-fraction mul
-              screen-width div
-              bounding-box-width mul
-	      def
+/feature-size view-distance distance-fraction mul screen-width div bounding-box-width mul def
 
-/Helvetica findfont feature-size 5 mul scalefont setfont
+% Choose font-size to be size of the ring of the median chosen visus.
+/Helvetica findfont feature-size test-range test-range length 2 idiv get div 5 mul scalefont setfont
 
 % Landolt ring according to DIN 58220
 % <unit> <angle> landolt
@@ -95,14 +100,15 @@ moveto
     /d exch def
     /visus exch def
     gsave
-    feature-size visus div 0 landolt d 0 rmoveto
-    feature-size visus div 45 landolt d 0 rmoveto
-    feature-size visus div 90 landolt d 0 rmoveto
-    feature-size visus div 135 landolt d 0 rmoveto
-    feature-size visus div 180 landolt d 0 rmoveto
-    feature-size visus div 225 landolt d 0 rmoveto
-    feature-size visus div 270 landolt d 0 rmoveto
-    feature-size visus div 315 landolt d 0 rmoveto
+    ring-angles {
+	do-random {
+	    pop
+	    /a ring-angles rand ring-angles length mod get def
+	} {
+	    /a exch def
+	} ifelse
+	feature-size visus div a landolt d 0 rmoveto
+    } forall
     visus (     ) cvs show
     (  [ 20/) show 20 visus div cvi (     ) cvs show ( ]) show
     grestore
