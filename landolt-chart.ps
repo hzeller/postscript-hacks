@@ -16,11 +16,17 @@
 % The size is calculated from the view distance vs the width of
 % the screen. This can be in any units, so use cm or inches as long
 % as it is the same units.
+% Try to maximize the distance you look at the scren whatever
+% screen/roomsize allows.
 /view-distance 200 def
 /screen-width 70 def
 
-% Visus ranges we're interested in.
-/test-range [0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1] def
+% Visus range to display
+/test-range [0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0] def
+
+% Distance of rings as multiplier of the diameter of
+% the largest ring (lowest visus).
+/grid-multiplier 1.8 def
 
 %---------------------------------
 /bounding-box-width 1000 def
@@ -43,9 +49,9 @@
               bounding-box-width mul
 	      def
 
-/Helvetica findfont bounding-box-width 100 div scalefont setfont
+/Helvetica findfont feature-size 5 mul scalefont setfont
 
-% Landolt ring according to DIN 58220 / ISO 8596
+% Landolt ring according to DIN 58220
 % <unit> <angle> landolt
 /landolt {
     1 dict begin
@@ -68,14 +74,13 @@
     outer-opening-angle neg sin outer-radius mul lineto
     0 0 outer-radius outer-angle outer-opening-angle arcn
 
-    closepath
-    fill
+    closepath fill
     grestore
     end
 } def
 
 % Grid distance is determined by lowest visus we test
-/grid-distance feature-size test-range 0 get div 10 mul def
+/grid-distance feature-size test-range 0 get div 5 mul grid-multiplier mul def
 
 bounding-box-width 2 div
 grid-distance 4 mul sub
