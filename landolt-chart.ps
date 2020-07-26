@@ -21,6 +21,9 @@
 /view-distance 200 def
 /screen-width 70 def
 
+% Make this lighter, e.g. 0.8 for lower contrast
+/graylevel 0 def
+
 % Show random arrangement in each reload. If fales, just show in sequence.
 /do-random true def
 
@@ -52,6 +55,10 @@ realtime srand
 % distance units, which results in screen units. Multiply by display units
 % we have per screen.
 /feature-size view-distance distance-fraction mul screen-width div bounding-box-width mul def
+
+/circle-distance feature-size 2 mul def
+
+0 setlinewidth
 
 % Choose font-size to be size of the ring of the median chosen visus.
 /Helvetica findfont feature-size test-range test-range length 2 idiv get div 5 mul scalefont setfont
@@ -115,7 +122,37 @@ moveto
     end
 } def
 
+% bgcolor-setter
+/circle-page {
+    3 dict begin
+    gsave
+    /bgcolor-setter exch def
+    bgcolor-setter
+    % Fill whole background with this color
+    0 0 moveto
+    bounding-box-width 0 rlineto
+    0 bounding-box-height rlineto
+    bounding-box-width neg 0 rlineto closepath fill
+    bounding-box-width 2 div bounding-box-height 2 div translate
+    0 0 moveto
 
+    circle-distance setlinewidth
+    graylevel setgray
+    220 circle-distance 2 mul neg 0 {
+	/r exch def
+	r 0 moveto
+	0 0 r 0 360 arc stroke
+    } for
+    grestore
+    end
+} def
+
+
+%-- show all the pages
+%%Page:
+
+% Landolt rings
+graylevel setgray
 test-range {
     grid-distance ring-series
     0 grid-distance neg rmoveto
@@ -124,4 +161,16 @@ test-range {
 % make sure all of the chart is displayed by showing something in the corners
 0 0 moveto 10 10 rlineto stroke
 bounding-box-width bounding-box-height moveto -10 -10 rlineto stroke
+showpage
+
+%%Page:
+{ 1 setgray } circle-page
+showpage
+
+%%Page:
+{ 1 0 0 setrgbcolor } circle-page
+showpage
+
+%%Page:
+{ 0 1 0 setrgbcolor } circle-page
 showpage
