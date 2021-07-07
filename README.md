@@ -120,6 +120,13 @@ its derivative.
 
 ![Parabolid reflection][mirror-reflection]
 
+### Cardboard Box
+
+To laser cut a parametrized glued chipboard or paper box. Score lines and cut
+lines are different colors for different dxf channels.
+
+![Carcboard box](./img/cardboard-box.png)
+
 [box-label-img]: ./img/box-label.png
 [wheel-img]: ./img/wheel-picture.png
 [ruler-img]: ./img/smd-ruler.jpg

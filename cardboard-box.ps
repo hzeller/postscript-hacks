@@ -1,0 +1,85 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 0 0 900 900
+
+/mm { 72 25.4 div mul } def
+
+/length 60 mm def
+/width 40 mm def
+/height 30 mm def
+/glue-strip 10 mm def
+
+/glue-diagonal glue-strip 2 sqrt div def
+
+/cut-color { 0 0 0 setrgbcolor } def
+/score-color { 1 0.8 0 setrgbcolor } def
+
+% dx dy -> hypot
+/hypot {
+    dup mul exch
+    dup mul
+    add sqrt
+} def
+
+% dx dy
+% A line with the cutting color
+/cut-rlineto { cut-color rlineto currentpoint stroke moveto } def
+
+% Line with scoring color
+/score-rlineto { score-color rlineto currentpoint stroke moveto } def
+
+% A line with a glue flap attached on the right side of the direction of travel.
+/glue-rlineto {
+    gsave
+    2 copy  % for atan
+    2 copy  % for hypot
+    hypot /len exch def
+    exch atan /angle exch def
+    currentpoint translate
+    angle rotate
+    score-color
+    len 0 lineto stroke
+    0 0 moveto
+    cut-color
+    glue-diagonal glue-diagonal neg lineto
+    len glue-diagonal 2 mul sub 0 rlineto
+    glue-diagonal glue-diagonal rlineto
+    stroke
+    grestore
+    rmoveto % uses original dx dy
+} def
+
+
+10 mm length glue-strip add 10 mm add translate
+
+0 0 moveto  % first box
+length 0 glue-rlineto
+0 width score-rlineto
+length neg 0 glue-rlineto
+0 width neg glue-rlineto
+
+length 0 moveto  % center box
+height 0 score-rlineto
+0 width score-rlineto
+height neg 0 score-rlineto
+
+length height add 0 moveto
+length 0 cut-rlineto
+0 width score-rlineto
+length neg 0 cut-rlineto
+
+length height add length add 0 moveto
+height 0 cut-rlineto
+0 width cut-rlineto
+height neg 0 cut-rlineto
+
+length 0 moveto
+0 length neg cut-rlineto
+height 0 glue-rlineto
+0 length glue-rlineto
+
+length height add   width moveto
+0 length glue-rlineto
+height neg 0 glue-rlineto
+0 length neg cut-rlineto
+
+showpage
