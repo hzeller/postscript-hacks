@@ -1,0 +1,58 @@
+%!PS-Adobe-3.0
+%%BoundingBox: 0 0 900 900
+
+/mm { 72 25.4 div mul } def
+
+/stitches 4 def
+/overlap 3 mm def
+
+/cone-length 20 mm def    % essentially the big radius
+/cone-cutout 5 mm def     % Empty part at the tip of the cone
+/cone-diameter 30 mm def  % bottom diameter after folded
+
+/needed-arc-fraction cone-diameter 2 div cone-length div def
+/base-angle 360 needed-arc-fraction mul def
+
+/pi 3.1415926535 def
+/outer-arc-len pi 2 mul cone-length mul def
+/extra-outer-angle overlap outer-arc-len div 360 mul def
+
+/inner-arc-len pi 2 mul cone-cutout mul def
+/extra-inner-angle overlap inner-arc-len div 360 mul def
+
+100 mm dup translate
+0 0 cone-cutout base-angle extra-inner-angle add extra-inner-angle neg arcn
+0 0 cone-length extra-outer-angle neg  base-angle extra-outer-angle add arc
+closepath
+
+stroke
+
+% Given current x position make n stitches, place them evenly
+% n start-offset end-offset
+/make-stitches {
+    /end-offset exch def
+    /start-offset exch def
+    /n exch def
+    /len end-offset start-offset sub def
+    /step len n div def
+    %0 1 1 setrgbcolor
+    0 step len step 2 div sub {
+	start-offset step 2 div add add 0 moveto
+	currentpoint 0.1 mm 0 360 arc stroke
+    } for
+} def
+
+/stitch-offset overlap 2 div def
+
+stitches 0 gt {
+    gsave
+    0 stitch-offset neg translate
+    stitches cone-cutout cone-length make-stitches
+    grestore
+    gsave
+    base-angle rotate
+    0 stitch-offset translate
+    stitches cone-cutout cone-length make-stitches
+    grestore
+} if
+showpage
