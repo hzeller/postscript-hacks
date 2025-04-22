@@ -6,7 +6,7 @@
 pkgs.mkShell {
   buildInputs = with pkgs;
     [
-      okular
+      kdePackages.okular
       ghostscript
       pstoedit
       #lightburn   # requires unfree
